@@ -14,10 +14,7 @@ private:
         T value;
         Node *next;
 
-        explicit Node(T value) {
-            this->value = value;
-            next = nullptr;
-        }
+        explicit Node(T value, Node *next = nullptr) : value(value), next(next) {}
     };
 
     int number_of_elements = 0;
@@ -25,9 +22,7 @@ private:
 public:
     template<class U>
     void push(U &&x) {
-        Node *pointer = new Node(x);
-        pointer->next = last;
-        last = pointer;
+        last = new Node(x, last);
         ++number_of_elements;
     }
 

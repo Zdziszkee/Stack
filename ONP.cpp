@@ -26,8 +26,9 @@ int getPrecedence(const std::string &str) {
 }
 
 int main() {
-    std::string expression; //= "( 11 + ( ( ( ( 1 + 2 ) * ( 4 - 3 ) ) + ( 4 / 2 ) ) * ( 8 - 6 ) ) )";
-    std::cin>>expression;
+    std::string expression = "( 11 + ( ( ( ( 1 + 2 ) * ( 4 - 3 ) ) + ( 4 / 2 ) ) * ( 8 - 6 ) ) )";
+    std::getline(std::cin, expression);
+
     std::vector<std::string> elements;
     std::stringstream ss(expression);
     std::string token;
@@ -36,30 +37,36 @@ int main() {
         elements.push_back(token);
     }
 
+    std::string result;
+
     LinkedStack<std::string> stack;
     for (const auto &element: elements) {
         if (isDigit(element)) {
-            std::cout << element << " ";
+            result += element;
+            result += " ";
         } else if (element == "(") {
             stack.push(element);
         } else if (element == ")") {
             while (!stack.empty() && stack.top() != "(") {
-                std::cout << stack.top() << " ";
-                stack.pop();
+                result += stack.pop();
+                result += " ";
             }
             stack.pop();
         } else if (isOperator(element)) {
             while (!stack.empty() && getPrecedence(element) <= getPrecedence(stack.top())) {
-                std::cout << stack.top() << " ";
-                stack.pop();
+                result += stack.pop();
+                result += " ";
             }
             stack.push(element);
         }
 
     }
     while (!stack.empty()) {
-        std::cout << stack.pop() << " ";
+        result += stack.pop();
+        result += " ";
     }
+    result.pop_back();
+    std::cout << result;
 }
 
 
